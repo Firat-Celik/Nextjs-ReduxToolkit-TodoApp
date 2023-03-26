@@ -1,5 +1,7 @@
 /* index.css */
-
+.css-i9fmh8-MuiBackdrop-root-MuiModal-backdrop {
+  background-color: #00000042 !important;
+}
 button {
   margin: 0;
   padding: 0;
@@ -211,7 +213,7 @@ body {
 }
 
 .todo-list li .destroy {
-  display: none;
+
   position: absolute;
   top: 0;
   right: 10px;
@@ -219,11 +221,12 @@ body {
   width: 40px;
   height: 40px;
   margin: auto 0;
-  font-size: 30px;
+  font-size: 10px;
   color: #cc9a9a;
   margin-bottom: 11px;
   transition: color 0.2s ease-out;
 }
+
 
 .todo-list li .destroy:hover {
   color: #af5b5e;
