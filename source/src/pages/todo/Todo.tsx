@@ -45,7 +45,9 @@ function Todo() {
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
   function addTodos() {
-    dispatch(addTodo({ description: value }));
+    if (value != "" && value != null) {
+      dispatch(addTodo({ description: value }));
+    }
   }
 
   function removeItem(id: number) {
@@ -53,7 +55,7 @@ function Todo() {
   }
 
   function completedTodo(id: number) {
-    dispatch(completeTodo({ id: id }));
+    setTimeout(() => dispatch(completeTodo({ id: id })), 800);
   }
 
   function editTodos(description: string, id: number) {
