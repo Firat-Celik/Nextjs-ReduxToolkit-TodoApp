@@ -56,9 +56,14 @@ export const TodoSlice = createSlice({
       state.isTotalCount++;
     },
     clearTodo: (state) => {
-      state.isActiveCount = 0;
-      state.isDeleteCount = state.todos.length;
-      state.todos = [];
+      state.todos.forEach((todo) => {
+        if (todo.isComplete && !todo.isDelete) {
+          todo.isDelete = true;
+          todo.isActive = false;
+          state.isDeleteCount++;
+          state.isCompleteCount--;
+        }
+      });
     },
     removeTodo: (state, action: PayloadAction<{ id: number }>) => {
       const TodoItem: any = state.todos.find(
@@ -85,6 +90,18 @@ export const TodoSlice = createSlice({
       TodoItem.isActive = false;
       state.isCompleteCount++;
     },
+    recoverTodo: (state, action: PayloadAction<{ id: number }>) => {
+      const TodoItem: any = state.todos.find(
+        (item) => item.id === action.payload.id
+      );
+      if (TodoItem) {
+        TodoItem.isDelete = false;
+        TodoItem.isActive = true;
+        TodoItem.isComplete = false;
+        state.isDeleteCount--;
+        state.isActiveCount++;
+      }
+    },
   },
   extraReducers: (builder) => {
     // builder.addCase(fetchPerson.fulfilled, (state, action) => {
@@ -98,5 +115,5 @@ export const TodoSlice = createSlice({
 });
 
 export default TodoSlice.reducer;
-export const { addTodo, removeTodo, editTodo, completeTodo, clearTodo } =
+export const { addTodo, removeTodo, editTodo, completeTodo, clearTodo, recoverTodo } =
   TodoSlice.actions;

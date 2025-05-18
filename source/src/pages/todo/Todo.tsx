@@ -1,214 +1,230 @@
-import React, { useEffect, useRef, useState } from "react";
-import "../todo/Todo.css";
-import { useAppDispatch, useAppSelector } from "../../store/store";
+import React, { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import type { RootState } from "../../store/store";
+import { addTodo, removeTodo, editTodo, completeTodo, clearTodo, recoverTodo } from "../../store/features/todoSlice";
+import type { Todo } from "../../store/features/todoSlice";
+import styles from "./Todo.module.css";
 import Button from "@mui/material/Button";
-import {
-  addTodo,
-  clearTodo,
-  completeTodo,
-  editTodo,
-  removeTodo,
-} from "../../store/features/todoSlice";
 import SaveIcon from "@mui/icons-material/Save";
 import DeleteIcon from "@mui/icons-material/Delete";
-import Modal from "@mui/material/Modal/Modal";
-import { Box, Tooltip, Typography } from "@mui/material";
+import Modal from "@mui/material/Modal";
+import Box from "@mui/material/Box";
+import TextField from "@mui/material/TextField";
+import { Checkbox, Typography } from "@mui/material";
 import BorderColorIcon from "@mui/icons-material/BorderColor";
-function Todo() {
-  //region setValue
-  const [value, setValue] = useState("");
-  const [changeValue, setChangeValue] = useState("");
-  const [valueId, setValueId] = useState(0);
-  const [open, setOpen] = React.useState(false);
-  //endregion setValue
 
-  //region setSettings
-  const style = {
-    position: "absolute" as "absolute",
-    top: "50%",
-    left: "50%",
-    transform: "translate(-50%, -50%)",
-    width: 400,
-    bgcolor: "white",
-    border: "2px solid white",
-    boxShadow: 4,
-    borderRadius: 3,
-    p: 4,
+const Todo: React.FC = () => {
+  const [value, setValue] = useState<string>("");
+  const [editValue, setEditValue] = useState<string>("");
+  const [editId, setEditId] = useState<number | null>(null);
+  const [open, setOpen] = useState<boolean>(false);
+  const [filter, setFilter] = useState<string>("all");
+
+  const todos = useSelector((state: RootState) => state.todo.todos);
+  const dispatch = useDispatch();
+
+  const handleAddTodo = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (value.trim()) {
+      dispatch(addTodo({ description: value }));
+      setValue("");
+    }
   };
 
-  const todos = useAppSelector((state) => state.todo);
+  const handleRemoveTodo = (id: number) => {
+    dispatch(removeTodo({ id }));
+  };
 
-  const dispatch = useAppDispatch();
-  //endregion setSettings
+  const handleEditTodo = (id: number, description: string) => {
+    setEditId(id);
+    setEditValue(description);
+    setOpen(true);
+  };
 
-  //region setFunctions
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
-  function addTodos() {
-    if (value != "" && value != null) {
-      dispatch(addTodo({ description: value }));
+  const handleUpdateTodo = () => {
+    if (editId !== null && editValue.trim()) {
+      dispatch(editTodo({ id: editId, description: editValue }));
+      setEditId(null);
+      setEditValue("");
+      setOpen(false);
     }
-  }
+  };
 
-  function removeItem(id: number) {
-    dispatch(removeTodo({ id: id }));
-  }
+  const handleCompleteTodo = (id: number) => {
+    dispatch(completeTodo({ id }));
+    setFilter("completed");
+  };
 
-  function completedTodo(id: number) {
-    setTimeout(() => dispatch(completeTodo({ id: id })), 800);
-  }
-
-  function editTodos(description: string, id: number) {
-    console.log("idsi", id);
-    dispatch(editTodo({ description: description, id: id }));
-  }
-
-  function deleteTodo() {
+  const handleClearCompleted = () => {
     dispatch(clearTodo());
-  }
-  //endregion setFunctions setSettings
+  };
+
+  const filteredTodos = todos.filter((todo: Todo) => {
+    if (filter === "active") return !todo.isComplete && !todo.isDelete;
+    if (filter === "completed") return todo.isComplete && !todo.isDelete;
+    if (filter === "deleted") return todo.isDelete;
+    return !todo.isDelete;
+  });
+
+  const activeTodosCount = todos.filter((todo: Todo) => !todo.isComplete && !todo.isDelete).length;
+  const completedTodosCount = todos.filter((todo: Todo) => todo.isComplete && !todo.isDelete).length;
+  const deletedTodosCount = todos.filter((todo: Todo) => todo.isDelete).length;
 
   return (
-    <div>
-      <section className="todoapp">
-        <header className="header">
+      <div className={styles.todoapp}>
+        <header className={styles.header}>
           <h1>Yapılacaklar</h1>
-          <input
-            className="new-todo"
-            placeholder="Ne Yapmayı Düşünüyorsun?"
-            autoFocus
-            value={value}
-            onChange={(e) => setValue(e.target.value)}
-          />
-          <Button
-            variant="contained"
-            size={"small"}
-            style={{ float: "right", padding: 5, margin: 5 }}
-            onClick={() => addTodos()}
-            startIcon={<SaveIcon />}
-          >
-            Ekle
-          </Button>
+          <form onSubmit={handleAddTodo} className={styles.inputContainer}>
+            <input
+                type="text"
+                className={styles.newTodo}
+                placeholder="Ne Eklemek İstersin?"
+                value={value}
+                onChange={(e) => setValue(e.target.value)}
+            />
+            <Button
+                type="submit"
+                variant="contained"
+                color="primary"
+                startIcon={<SaveIcon />}
+                className={styles.addButton}
+            >
+              Ekle
+            </Button>
+          </form>
         </header>
-        <br />
-        <br />
 
-        <section className="main">
-          <input className="toggle-all" type="checkbox" />
-          <label htmlFor="toggle-all">Tamamlananlar</label>
-
-          <ul className="todo-list">
-            {todos.todos.map((todo) =>
-              todo.isActive ? (
-                <li className="completed" key={todo.id}>
-                  <div className="view">
+        <section className={styles.main}>
+          <ul className={styles.todoList}>
+            {filteredTodos.map((todo: Todo) => (
+                <li key={todo.id} className={`${styles.todoItem} ${todo.isComplete ? 'completed' : ''}`}>
+                  <div className={styles.view}>
                     <input
-                      className="toggle"
-                      type="checkbox"
-                      onClick={() => completedTodo(todo.id)}
+                        type="radio"
+                        className={styles.radioInput}
+                        checked={todo.isComplete}
+                        onChange={() => handleCompleteTodo(todo.id)}
                     />
-                    <Tooltip
-                      title="Düzenlemek İçin Yazıya Tıklayın"
-                      placement="left"
-                      arrow
-                    >
-                      <label>
-                        <span
-                          onClick={(e) => {
-                            handleOpen();
-                            setChangeValue(todo.description);
-                            setValueId(todo.id);
-                          }}
-                        >
-                          {todo.description}
-                        </span>{" "}
-                      </label>
-                    </Tooltip>
-                    <Modal
-                      open={open}
-                      onClose={handleClose}
-                      aria-labelledby="modal-modal-title"
-                      aria-describedby="modal-modal-description"
-                    >
-                      <Box sx={style}>
-                        <Typography
-                          style={{ textAlign: "center" }}
-                          id="modal-modal-title"
-                          variant="h6"
-                          component="h2"
-                        >
-                          Görev Düzenle
-                        </Typography>
-                        <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-                          <input
-                            style={{
-                              color: "white",
-                              backgroundColor: "#03a9f4",
-                            }}
-                            className="new-todo"
-                            autoFocus
-                            value={changeValue}
-                            onChange={(e) => setChangeValue(e.target.value)}
-                          />
-                          <br />
-                          <Button
+                    <span className={styles.todoLabel}>{todo.description}</span>
+                    {filter === "deleted" ? (
+                        <Button
+                            onClick={() => dispatch(recoverTodo({ id: todo.id }))}
+                            color="primary"
+                            size="small"
                             variant="contained"
-                            size={"small"}
-                            style={{ float: "right", marginTop: 5 }}
-                            onClick={(e) => {
-                              editTodos(changeValue, valueId);
-                              setOpen(false);
-                            }}
-                            startIcon={<BorderColorIcon />}
+                        >
+                          Kurtar
+                        </Button>
+                    ) : (
+                        <div>
+                          <Button
+                              onClick={() => handleEditTodo(todo.id, todo.description)}
+                              color="primary"
+                              size="small"
+                              startIcon={<BorderColorIcon />}
                           >
-                            Güncelle
+                            Düzenle
                           </Button>
-                        </Typography>
-                      </Box>
-                    </Modal>
-                    <DeleteIcon
-                      onClick={() => removeItem(todo.id)}
-                      className="destroy"
-                    />
+                          <Button
+                              onClick={() => handleRemoveTodo(todo.id)}
+                              color="error"
+                              size="small"
+                              startIcon={<DeleteIcon />}
+                          >
+                            Sil
+                          </Button>
+                        </div>
+                    )}
                   </div>
                 </li>
-              ) : (
-                <div></div>
-              )
-            )}
+            ))}
           </ul>
         </section>
 
-        <footer className="footer">
-          <span className="todo-count">
-            <strong>{todos.isActiveCount} </strong>
-            görev mevcut
-          </span>
-
-          <ul className="filters">
+        <footer className={styles.footer}>
+          <ul className={styles.filters}>
             <li>
-              <a href="#/" className="selected">
-                <strong>{todos.isTotalCount} </strong>
+              <a
+                  href="#"
+                  className={filter === "all" ? styles.selected : ""}
+                  onClick={() => setFilter("all")}
+              >
                 Tümü
               </a>
             </li>
             <li>
-              <strong>{todos.isDeleteCount} </strong>
-              <a href="#/">Silinmiş</a>
+              <a
+                  href="#"
+                  className={filter === "active" ? styles.selected : ""}
+                  onClick={() => setFilter("active")}
+              >
+                Aktif
+              </a>
             </li>
             <li>
-              <strong>{todos.isCompleteCount} </strong>
-              <a href="#/">Tamamlanan</a>
+              <a
+                  href="#"
+                  className={filter === "completed" ? styles.selected : ""}
+                  onClick={() => setFilter("completed")}
+              >
+                Tamamlanan
+              </a>
+            </li>
+            <li>
+              <a
+                  href="#"
+                  className={filter === "deleted" ? styles.selected : ""}
+                  onClick={() => setFilter("deleted")}
+              >
+                Silinen
+              </a>
             </li>
           </ul>
-
-          <button className="clear-completed" onClick={() => deleteTodo()}>
-            Tümünü Sil
-          </button>
+          <span className={styles.footerRight}>{activeTodosCount} adet görev kaldı</span>
         </footer>
-      </section>
-    </div>
+
+        {completedTodosCount > 0 && (
+            <button className={styles.clearCompleted} onClick={handleClearCompleted}>
+              Tamamlananları Temizle ({completedTodosCount})
+            </button>
+        )}
+
+        <Modal open={open} onClose={() => setOpen(false)}>
+          <Box
+              sx={{
+                position: "absolute",
+                top: "50%",
+                left: "50%",
+                transform: "translate(-50%, -50%)",
+                width: 400,
+                bgcolor: "background.paper",
+                border: "2px solid #000",
+                boxShadow: 24,
+                p: 4,
+              }}
+          >
+            <Typography variant="h6" component="h2" mb={2}>
+              Edit Todo
+            </Typography>
+            <TextField
+                fullWidth
+                value={editValue}
+                onChange={(e) => setEditValue(e.target.value)}
+                className={styles.editInput}
+            />
+            <Button
+                variant="contained"
+                color="primary"
+                onClick={handleUpdateTodo}
+                fullWidth
+                sx={{ mt: 2 }}
+            >
+              Güncelle
+            </Button>
+          </Box>
+        </Modal>
+      </div>
   );
-}
+};
 
 export default Todo;
