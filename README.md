@@ -1,16 +1,43 @@
-# React-TodoApp
-React Redux Toolkit İle Hazırlamış Olduğum Ufak Bir Todolist Uygulamasıdır.
+# NextJs Redux Toolkit TodoList Uygulaması
 
-Projeye Ait Görseller Aşağıda Yer Almaktadır. Faydalı Olması Dileği İle :)
+Bu proje, NextJs ve Redux Toolkit kullanılarak hazırlanmış basit bir yapılacaklar (Todo) uygulamasıdır.
 
+## Özellikler
+- Görev ekleme, silme, düzenleme
+- Görevleri tamamlandı/aktif/silinen olarak filtreleme
+- Tamamlanan görevleri temizleme
+- Silinen görevleri kurtarma
+- Modern ve canlı arayüz
+
+## Kurulum
+1. Bu projeyi bilgisayarınıza klonlayın:
+   ```
+   git clone <https://github.com/Firat-Celik/Nextjs-ReduxToolkit-TodoApp.git>
+   ```
+2. Proje dizinine girin:
+   ```
+   cd React-ReduxToolkit-TodoApp/source
+   ```
+3. Bağımlılıkları yükleyin:
+   ```
+   npm install
+   ```
+
+## Çalıştırma
+Projeyi başlatmak için:
+```
+npm run dev
+```
+Ardından tarayıcınızda `http://localhost:3000` adresini ziyaret edebilirsiniz.
  
-![1](https://user-images.githubusercontent.com/56916843/227811456-217a8ed9-298b-493c-8086-0f9d95edaafd.png)
+ ![image](https://github.com/user-attachments/assets/8e6b6659-e55a-49dc-a8a9-e3661b131539)
+
+ ![image](https://github.com/user-attachments/assets/6ca201f8-674f-499b-9d11-e5d291fb39f8)
+
+ ![image](https://github.com/user-attachments/assets/1f9aa379-81dc-4775-a6ac-e43b2841bebf)
 
 
-![2](https://user-images.githubusercontent.com/56916843/227811476-1b8c4032-1cd1-4af8-aadd-50a64cd19c15.png)
 
 
-![3](https://user-images.githubusercontent.com/56916843/227811486-d14622dc-81fb-4b9b-bc58-cc9363b874e9.png)
 
 
-![4](https://user-images.githubusercontent.com/56916843/227811493-b08d2db1-0edb-49f4-8b33-ca2cdc85ac72.png)
