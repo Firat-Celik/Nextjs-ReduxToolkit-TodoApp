@@ -4,14 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="401a0d7d-060e-484c-b861-0402f11740f8" name="Changes" comment="">
+    <list default="true" id="401a0d7d-060e-484c-b861-0402f11740f8" name="Changes" comment="Updated To Nextjs">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/source/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/source/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/source/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/source/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/source/src/pages/todo/Todo.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/source/src/pages/todo/Todo.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/source/src/pages/todo/Todo.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/source/src/store/features/todoSlice.ts" beforeDir="false" afterPath="$PROJECT_DIR$/source/src/store/features/todoSlice.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/source/tsconfig.json" beforeDir="false" afterPath="$PROJECT_DIR$/source/tsconfig.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/source/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/source/README.md" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -21,6 +16,18 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
+  <component name="GitHubPullRequestSearchHistory"><![CDATA[{
+  "lastFilter": {
+    "state": "OPEN",
+    "assignee": "Firat-Celik"
+  }
+}]]></component>
+  <component name="GithubPullRequestsUISettings"><![CDATA[{
+  "selectedUrlAndAccountId": {
+    "url": "https://github.com/Firat-Celik/React-ReduxToolkit-TodoApp.git",
+    "accountId": "ea6b389c-f396-4c3c-8c8c-bcb8cb446a7a"
+  }
+}]]></component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
   </component>
@@ -67,11 +74,24 @@
       <updated>1678333472897</updated>
       <workItem from="1678333477019" duration="57000" />
       <workItem from="1747531304493" duration="1258000" />
-      <workItem from="1747532959887" duration="3447000" />
+      <workItem from="1747532959887" duration="3945000" />
     </task>
+    <task id="LOCAL-00001" summary="Updated To Nextjs">
+      <option name="closed" value="true" />
+      <created>1747536850703</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1747536850703</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="Updated To Nextjs" />
+    <option name="LAST_COMMIT_MESSAGE" value="Updated To Nextjs" />
   </component>
 </project>
